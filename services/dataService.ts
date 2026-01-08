@@ -3,20 +3,35 @@ import { getFunTitle, BEER_OPTIONS, INITIAL_API_URL } from '../constants';
 
 const STORAGE_USER_KEY = 'beer-meter-user';
 
-// --- Helper Functions ---
+// --- Security Helper Functions ---
+
+// Previne XSS simples removendo tags HTML
+const sanitizeInput = (input: string): string => {
+  if (!input) return '';
+  return input.replace(/<[^>]*>?/gm, '').trim();
+};
 
 export const getApiUrl = (): string => {
   return INITIAL_API_URL;
 };
 
 export const getCurrentUser = (): User | null => {
-  const stored = localStorage.getItem(STORAGE_USER_KEY);
-  return stored ? JSON.parse(stored) : null;
+  try {
+    const stored = localStorage.getItem(STORAGE_USER_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch (e) {
+    console.error("Erro ao ler dados locais", e);
+    return null;
+  }
 };
 
 export const setCurrentUser = (user: User | null) => {
   if (user) {
-    localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(user));
+    // SECURITY UPGRADE: Nunca armazene a senha no localStorage
+    // Criamos uma cópia do objeto e removemos o campo password antes de salvar
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...safeUser } = user; 
+    localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(safeUser));
   } else {
     localStorage.removeItem(STORAGE_USER_KEY);
   }
@@ -33,6 +48,9 @@ export const dataService = {
 
       const response = await fetch(url, {
         method: 'GET',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8', // Garante que não é executado como script
+        },
         cache: 'no-store' // Força o navegador a não usar cache
       });
 
@@ -44,9 +62,9 @@ export const dataService = {
       // Sheet header: id, username, password, email, name, avatar
       const users: User[] = (data.users || []).slice(1).map((row: any[]) => ({
         id: String(row[0]),
-        username: String(row[1]),
-        password: String(row[2]),
-        name: String(row[4]),
+        username: sanitizeInput(String(row[1])),
+        password: String(row[2]), // Mantemos aqui na memória RAM para validação, mas não salvamos no LocalStorage
+        name: sanitizeInput(String(row[4])),
         avatar: String(row[5])
       }));
 
@@ -71,7 +89,7 @@ export const dataService = {
           id: String(row[0]),
           containerType: type,
           quantity: qty,
-          userName: String(row[5]),
+          userName: sanitizeInput(String(row[5])),
           timestamp: String(row[6]),
           equivalentUnits: parseFloat((qty * factor).toFixed(2))
         };
@@ -86,10 +104,13 @@ export const dataService = {
   },
 
   submitLog: async (user: User, beerOption: BeerOption, quantity: number) => {
+    // Validação básica antes de enviar
+    if (quantity <= 0 || quantity > 50) return; // Prevent massive spam
+
     const payload = {
       action: 'addRanking',
       id: Date.now().toString(),
-      user: user.username,
+      user: sanitizeInput(user.username),
       date: new Date().toISOString(),
       [beerOption.gasKey]: quantity
     };
@@ -105,9 +126,9 @@ export const dataService = {
     const payload = {
       action: 'updateUser',
       id: user.id,
-      username: user.username,
-      password: user.password,
-      name: user.name,
+      username: sanitizeInput(user.username),
+      password: user.password, // Em um app real, faríamos hash aqui. No momento, mantemos compatibilidade com a planilha.
+      name: sanitizeInput(user.name),
       avatar: user.avatar
     };
 

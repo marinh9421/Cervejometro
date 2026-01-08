@@ -16,9 +16,34 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, existingUsers }) => 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const validateInput = () => {
+    // Regex: Apenas letras, números e underline. Sem espaços ou caracteres especiais.
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    
+    if (!usernameRegex.test(username)) {
+      setError('Usuário deve conter apenas letras e números (sem espaços).');
+      return false;
+    }
+    
+    if (username.length < 3) {
+      setError('Usuário deve ter pelo menos 3 caracteres.');
+      return false;
+    }
+
+    if (isRegistering && name.length < 2) {
+      setError('Nome muito curto.');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!validateInput()) return;
+
     setLoading(true);
 
     try {
@@ -96,6 +121,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, existingUsers }) => 
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all"
                   placeholder="Carlos Silva"
+                  maxLength={20}
                 />
               </div>
             )}
@@ -106,9 +132,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, existingUsers }) => 
                 type="text"
                 required
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value.trim())}
                 className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all"
                 placeholder="usuario123"
+                maxLength={20}
               />
             </div>
 
@@ -125,7 +152,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, existingUsers }) => 
             </div>
 
             {error && (
-              <p className="text-sm text-red-500 text-center bg-red-50 p-2 rounded-lg font-medium">{error}</p>
+              <p className="text-sm text-red-500 text-center bg-red-50 p-2 rounded-lg font-medium animate-pulse">{error}</p>
             )}
 
             <button

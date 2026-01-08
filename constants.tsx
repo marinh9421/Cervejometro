@@ -1,7 +1,9 @@
 import { BeerContainerType, BeerOption, TimeFilter } from './types';
 
 // URL do Google Apps Script
-export const INITIAL_API_URL = 'https://script.google.com/macros/s/AKfycbwltYbKn03yq7EY7oGSv7Tr1qVRXRXBnPg3YTAH54HthWnY2IxkmImxsQWSYdy2PN8N/exec'; 
+// Melhora de Segurança: Tenta ler da variável de ambiente primeiro.
+// Se não existir (dev local), usa o fallback hardcoded.
+export const INITIAL_API_URL = (import.meta as any).env?.VITE_API_URL || 'https://script.google.com/macros/s/AKfycbwltYbKn03yq7EY7oGSv7Tr1qVRXRXBnPg3YTAH54HthWnY2IxkmImxsQWSYdy2PN8N/exec'; 
 
 export const BEER_OPTIONS: BeerOption[] = [
   {
