@@ -1,0 +1,5 @@
+{
+  "name": "Cervejômetro do Grupo",
+  "description": "Uma ferramenta divertida e elegante para rastrear o consumo de cerveja entre amigos, com rankings em tempo real e estatísticas.",
+  "requestFramePermissions": []
+}
