@@ -11,7 +11,7 @@ export const BEER_OPTIONS: BeerOption[] = [
     label: 'Lata P',
     volumeLabel: '269ml',
     conversionFactor: 1.00,
-    icon: '🥫',
+    icon: '/lata-269.png', // Arquivo na pasta public
     gasKey: 'v269'
   },
   {
@@ -19,7 +19,7 @@ export const BEER_OPTIONS: BeerOption[] = [
     label: 'Lata M',
     volumeLabel: '350ml',
     conversionFactor: 1.30,
-    icon: '🥫',
+    icon: '/lata-350.png', // Arquivo na pasta public
     gasKey: 'v350'
   },
   {
@@ -27,7 +27,7 @@ export const BEER_OPTIONS: BeerOption[] = [
     label: 'Garrafa',
     volumeLabel: '600ml',
     conversionFactor: 2.23,
-    icon: '🍾',
+    icon: '/garrafa-600.png', // Arquivo na pasta public
     gasKey: 'v600'
   },
   {
@@ -35,7 +35,7 @@ export const BEER_OPTIONS: BeerOption[] = [
     label: 'Litrão',
     volumeLabel: '1 Litro',
     conversionFactor: 3.72,
-    icon: '🍺',
+    icon: '/garrafa-1l.png', // Arquivo na pasta public
     gasKey: 'v1l'
   }
 ];
