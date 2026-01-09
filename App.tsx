@@ -151,7 +151,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="w-full text-center py-6 text-slate-400 text-sm">
-        <p>© {new Date().getFullYear()} Cervejômetro do Grupo. Beba com moderação.</p>
+        <p>© {new Date().getFullYear()} Quantas Foi Mesmo?. Beba com moderação.</p>
       </footer>
     </div>
   );

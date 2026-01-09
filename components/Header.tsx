@@ -10,8 +10,8 @@ const Header: React.FC = () => {
             <Beer className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Cervejômetro</h1>
-            <p className="text-xs text-amber-100 font-medium">Controle Oficial do Grupo</p>
+            <h1 className="text-xl font-bold tracking-tight">Quantas Foi Mesmo?</h1>
+            <p className="text-xs text-amber-100 font-medium">Não julgamos. Só registramos.</p>
           </div>
         </div>
       </div>

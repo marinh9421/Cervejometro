@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Beer, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { User } from '../types';
 import { dataService } from '../services/dataService';
 
@@ -15,6 +15,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, existingUsers }) => 
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const validateInput = () => {
     // Regex: Apenas letras, números e underline. Sem espaços ou caracteres especiais.
@@ -95,11 +96,18 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, existingUsers }) => 
         <div className="bg-gradient-to-br from-amber-500 to-yellow-500 p-8 text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent"></div>
           <div className="relative z-10 flex flex-col items-center">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-4 shadow-inner">
-              <Beer className="w-8 h-8 text-white" />
+            <div className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-4 shadow-inner p-4">
+              {!logoError && (
+                <img 
+                  src="/logotipo.svg" 
+                  alt="Logo Quantas Foi Mesmo?" 
+                  className="w-full h-full object-contain drop-shadow-md"
+                  onError={() => setLogoError(true)}
+                />
+              )}
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Cervejômetro</h1>
-            <p className="text-amber-100 text-sm mt-1">O controle oficial do gole</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Quantas Foi Mesmo?</h1>
+            <p className="text-amber-100 text-sm mt-1">Não julgamos. Só registramos.</p>
           </div>
         </div>
 
